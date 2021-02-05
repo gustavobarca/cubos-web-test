@@ -42,50 +42,6 @@ export default function Movies() {
     return returnValue;
   }
 
-  function getPage(apiPage: number, page: number, data: Movie[], whenFecthNext: (page: number) => void) {
-    const getGroupedData = group(data);
-
-    const pageIndex = page - 1;
-    const pageResults = getGroupedData[pageIndex];
-    const willFetchNext = page > getGroupedData.length;
-
-    if (willFetchNext) {
-      whenFecthNext(apiPage + 1);
-      return [];
-    }
-
-    return pageResults;
-  }
-
-  // let page = 1;
-  // let innerPage = 6;
-
-  // movies = getPage(page, innerPage, a, pg => {
-  //   page = pg;
-  //   innerPage = 1;
-  // });
-
-  async function fetchPopular(pageNumber = 1, innerPage = 1, fetchNext: (n: number) => void) {
-    try {
-      console.log('pageNumber', pageNumber, 'innerPage', 1);
-
-      if (!loading) setLoading(true);
-      const { total_results, results } = await moviesService.getPopular(pageNumber);
-      const paged = getPage(pageNumber, innerPage, results, fetchNext);
-
-      const total = Math.ceil(total_results / 5);
-
-      setTotal(total);
-
-      setMovies(results);
-      setPagedResults(paged);
-
-      setLoading(false);
-    } catch (err) {
-      setError('😕 Oops! Ocorreu um erro');
-    }
-  }
-
   async function search(pageNumber = 1, query: string) {
     try {
       if (!loading) setLoading(true);
@@ -98,39 +54,45 @@ export default function Movies() {
     }
   }
 
-  // function handlePageChange(innerPage: number) {
-  //   setPage(innerPage);
+  const [grouped, setGrouped] = useState<Movie[][]>([]);
+  const [innerPage, setInnerPage] = useState(1);
 
-  //   if (searchTerm) {
-  //     search(innerPage, searchTerm);
-  //   } else {
-  //     console.log('apiPage', apiPage, 'innerPage', innerPage);
-
-  //     if (innerPage > apiPage * 5) {
-
-  //     }
-
-  //     // const pagefinded = getPage(apiPage, innerPage, movies, pagenum => {
-  //     //   console.log('mudoooooooooooooo');
-  //     //   // setApiPage(pagenum);
-  //     //   // setPage(1);
-  //     // });
-
-  //     // setPagedResults(pagefinded);
-  //   }
-  // }
-
-  function getPage2(innerPage: number, data: Movie[]) {
-    const grouped = group(data);
-
-    const pageIndex = innerPage - 1;
-
-    return grouped[pageIndex];
+  function clamp(val: number) {
+    return val < 0 ? 0 : val;
   }
 
-  const [innerPageIndexActual, setInnerPageIndexActual] = useState(0);
+  function getPage2(innerPage: number, groupedResults: Movie[][]) {
+    const index = clamp(innerPage - 1);
+    return groupedResults[index];
+  }
+
+  async function fetchNewPages(pageNumber = 1, innerPage = 1) {
+    try {
+      console.log('pageNumber', pageNumber, 'innerPage', innerPage);
+
+      const { results, total_results } = await moviesService.getPopular(pageNumber);
+      const grouped = group(results);
+
+      console.log('CHAMOOOO', grouped);
+
+      setGrouped(grouped);
+      setMovies(results);
+      const page = getPage2(innerPage, grouped);
+
+      const total = Math.ceil(total_results / 5);
+
+      setTotal(total);
+
+      setLoading(false);
+      setPagedResults(page);
+    } catch (err) {
+      setError('😕 Oops! Ocorreu um erro');
+    }
+  }
 
   function handlePageChange(pageNum: number) {
+    const limit = 4;
+
     const taIndoPraFrente = pageNum > page;
     const parado = pageNum === page;
     const taIndoPraTras = pageNum < page;
@@ -140,50 +102,47 @@ export default function Movies() {
     setPage(pageNum);
 
     const blocksPassed = apiPage - 1 < 0 ? 0 : apiPage - 1;
-    const innerPageIndexDestiny = pageNum - blocksPassed * 5;
-    const vaiIrPraFrente = innerPageIndexDestiny > 5;
+    const innerPageIndexDestiny = pageNum - blocksPassed * limit;
+    const vaiIrPraFrente = innerPageIndexDestiny > limit;
     const vairIrPratras = innerPageIndexDestiny <= 0;
 
     // PA FRENTE
     if (vaiIrPraFrente) {
-      console.log('FOI PRA FRENTEEEEEE');
-
       setApiPage(prev => {
-        // Descobrir nova posição;
         const nextAPIPAGE = prev + 1;
 
         const newBlocksPassed = nextAPIPAGE - 1 < 0 ? 0 : nextAPIPAGE - 1;
-        const aa = pageNum - newBlocksPassed * 5;
+        const aa = pageNum - newBlocksPassed * limit;
 
-        console.log('novo index', aa, 'page', nextAPIPAGE);
-        setInnerPageIndexActual(aa);
+        fetchNewPages(nextAPIPAGE, aa);
+        setInnerPage(aa);
 
         return nextAPIPAGE;
       });
     } else if (vairIrPratras) {
-      console.log('vai pa trassssssssss');
       setApiPage(prev => {
-        // Descobrir nova posição;
         const nextAPIPAGE = prev - 1;
 
         const newBlocksPassed = nextAPIPAGE - 1 < 0 ? 0 : nextAPIPAGE - 1;
-        const aa = pageNum - newBlocksPassed * 5;
+        const aa = pageNum - newBlocksPassed * limit;
 
-        console.log('novo index', aa, 'page', nextAPIPAGE);
-        setInnerPageIndexActual(aa);
+        fetchNewPages(nextAPIPAGE, aa);
+        setInnerPage(aa);
 
         return nextAPIPAGE;
       });
     } else if (taIndoPraFrente) {
-      setInnerPageIndexActual(prev => {
-        console.log('PRA FRENTE =>', prev + 1);
-        return prev + 1;
-      });
+      const newBlocksPassed = apiPage - 1 < 0 ? 0 : apiPage - 1;
+      const aa = pageNum - newBlocksPassed * limit;
+
+      setPagedResults(getPage2(aa, grouped));
+      setInnerPage(aa);
     } else if (taIndoPraTras) {
-      setInnerPageIndexActual(prev => {
-        console.log('PRA TRAS', prev - 1);
-        return prev - 1;
-      });
+      const newBlocksPassed = apiPage - 1 < 0 ? 0 : apiPage - 1;
+      const aa = pageNum - newBlocksPassed * limit;
+
+      setPagedResults(getPage2(aa, grouped));
+      setInnerPage(aa);
     }
   }
 
@@ -247,7 +206,7 @@ export default function Movies() {
   }
 
   useEffect(() => {
-    fetchPopular(1, 1, () => {});
+    fetchNewPages();
   }, []);
 
   // useEffect(() => {

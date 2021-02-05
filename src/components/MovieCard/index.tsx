@@ -3,15 +3,9 @@ import configs from 'config/api.json';
 import PointsBadge from 'components/PointsBadge';
 import XDate from 'xdate';
 import GenreTag from 'components/GenreTag';
-import {
-  Container,
-  RightCol,
-  Header,
-  TextsContainer,
-  Strip,
-  Content,
-  Poster,
-} from './styles';
+import { Genre } from 'types';
+import defaultImg from 'assets/images/default_movie.png';
+import { Container, RightCol, Poster } from './styles';
 
 interface Props {
   title: string;
@@ -19,7 +13,7 @@ interface Props {
   releaseDate: string;
   posterPath: string;
   overview: string;
-  genres: string[];
+  genres: Genre[];
   backdropPath: string;
 }
 
@@ -32,28 +26,31 @@ export default function MovieCard({
   genres,
   backdropPath,
 }: Props) {
+  const poster = posterPath ? `${configs.imagesURL}/w300/${posterPath}` : defaultImg;
+  const backdrop = backdropPath ? `${configs.imagesURL}/w300/${backdropPath}` : defaultImg;
+
   return (
     <Container>
       <Poster
         id="poster"
-        poster={`${configs.imagesURL}/w500/${posterPath}`}
-        backdrop={`${configs.imagesURL}/w500/${backdropPath}`}
+        poster={poster}
+        backdrop={backdrop}
       />
       <RightCol>
         <div>
-          <Strip />
-          <Header>
+          <div id="strip" />
+          <div id="movie-header">
             <PointsBadge percentage={points * 10} />
-            <TextsContainer>
+            <div id="movie-text-container">
               <h1>{title}</h1>
-              <h3>{new XDate(releaseDate).toString('dd/MM/yyyy')}</h3>
-            </TextsContainer>
-          </Header>
+              {releaseDate && <h3>{new XDate(releaseDate).toString('dd/MM/yyyy')}</h3>}
+            </div>
+          </div>
         </div>
-        <Content>
+        <div id="movie-content">
           <p>{overview}</p>
-          {genres.map(genre => <GenreTag key={genre} title={genre} />)}
-        </Content>
+          {genres.map(genre => <GenreTag key={genre.id} title={genre.name} />)}
+        </div>
       </RightCol>
     </Container>
   );

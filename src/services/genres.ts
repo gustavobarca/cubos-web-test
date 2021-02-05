@@ -1,9 +1,10 @@
+import { GenreResponse } from 'types';
 import api from './api';
 
 async function getFromMovies() {
-  const { data } = await api.get('/genre/movie/list');
+  const { data } = await api.get<GenreResponse>('/genre/movie/list');
 
-  return data;
+  return data.genres;
 }
 
 export default { getFromMovies };

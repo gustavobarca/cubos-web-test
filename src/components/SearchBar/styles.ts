@@ -14,7 +14,7 @@ export default styled.input`
   width: 100%;
 
   &:focus {
-    border: 2px solid ${props => props.theme.colors.complementary};
+    border: 2px solid ${props => props.theme.colors.border};
     outline: none;
   }
 

@@ -13,13 +13,11 @@ api.interceptors.request.use(async config => {
     const [path, qString] = config.url.split(/[?#]/);
 
     const params = queryString.parse(qString);
-
     if (!params.api_key) params.api_key = configs.key;
+    if (!params.language) params.language = 'pt-BR';
 
     config.url = `${config.baseURL}${path}?${queryString.stringify(params)}`;
   }
-
-  console.log(config.url);
 
   return config;
 });

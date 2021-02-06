@@ -21,8 +21,6 @@ async function addGenresToMovies(movies: Movie[]) {
 async function getPopular(page = 1) {
   const { data } = await api.get<PagedResponse<Movie>>(`/movie/popular?page=${page}`);
 
-  console.log(data);
-
   data.results = await addGenresToMovies(data.results);
   return data;
 }

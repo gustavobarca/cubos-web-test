@@ -8,28 +8,18 @@ interface Props {
 }
 
 export default function Pagination({ actualPage, totalPages, onChange }: Props) {
-  const [pageNumbers, setPageNumbers] = useState([actualPage]); // Refactor
-  const [all, setAll] = useState<number[]>([]); // Refactor
+  const [pageNumbers, setPageNumbers] = useState([actualPage]);
+  const [all, setAll] = useState<number[]>([]);
 
-  // Refactor
   function parseToArray(total?: number) {
     if (!total) return [actualPage];
 
     const elements: number[] = [];
-
-    for (let i = 1; i <= total; i++) {
-      if (i === actualPage) {
-        elements.push(i);
-      } else {
-        elements.push(i);
-      }
-    }
-
+    for (let i = 1; i <= total; i++) elements.push(i);
     return elements;
   }
 
-  // Refactor
-  function crop(array, page, total) {
+  function crop(array: number[], page: number, total: number) {
     const padding = (total - 1) / 2;
     if (array.length <= total) return array;
 
@@ -42,11 +32,9 @@ export default function Pagination({ actualPage, totalPages, onChange }: Props) 
     const endOffset = 1;
     let endPosition = index + padding + endOffset + startOffset;
 
-    // End verifications
     if (index === 0) endPosition = total;
     if (index > padding - 1) endPosition = index + padding + endOffset;
 
-    // Start verifications
     if (index === array.length - 1) start = index - total + endOffset;
     if (index === penultimate) start = index - total + padding;
 

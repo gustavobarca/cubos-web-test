@@ -2,16 +2,6 @@
 
 Projeto para o desafio técnico de web da Cubos Academy.
 
-###  🚀 Iniciando
-
-Instale as dependências:
-
-    yarn
-
-Inicie o projeto
-
-    yarn start
-    
 ### 🧩 Tecnologias usadas
 
 - 🔭 I’m currently working on ...
@@ -22,5 +12,16 @@ Inicie o projeto
 - 📫 How to reach me: ...
 - 😄 Pronouns: ...
 - ⚡ Fun fact: ...
+
+###  🚀 Iniciando
+
+Instale as dependências:
+
+    yarn
+
+Inicie o projeto
+
+    yarn start
     
+
     

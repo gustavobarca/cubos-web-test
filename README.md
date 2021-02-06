@@ -1,4 +1,4 @@
-# 🎥 Movies
+# 🎥 Cubos Movies
 
 ###  🚀 Getting started
 

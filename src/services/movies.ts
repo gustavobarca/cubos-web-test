@@ -39,6 +39,19 @@ async function get(id: number) {
   return data;
 }
 
+async function getByGenre(page = 1, genreID: number) {
+  const params = {
+    with_genres: genreID,
+    page,
+  };
+
+  const { data } = await api.get<PagedResponse<Movie>>(`/discover/movie?${queryString.stringify(params)}`);
+
+  data.results = await addGenresToMovies(data.results);
+
+  return data;
+}
+
 async function search(page = 1, query: string) {
   const params = { query, page };
 
@@ -48,4 +61,9 @@ async function search(page = 1, query: string) {
   return data;
 }
 
-export default { getPopular, search, get };
+export default {
+  getPopular,
+  search,
+  get,
+  getByGenre,
+};

@@ -29,7 +29,7 @@ export default function MovieDetails() {
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [fetch]);
 
   function render() {
     if (error) {

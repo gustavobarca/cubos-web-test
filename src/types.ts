@@ -25,6 +25,27 @@ export interface Movie {
   video: boolean;
   vote_average: number;
   vote_count: number;
+  status: string;
+  runtime: number;
+  budget: number;
+  revenue: number;
+  videoObject?: Video;
+}
+
+export interface Video {
+  id: string;
+  iso_639_1: string;
+  iso_3166_1: string;
+  key: string;
+  name: string;
+  site: string;
+  size: number;
+  type: string;
+}
+
+export interface VideosResult {
+  id: number;
+  results: Video[];
 }
 
 export interface Genre {

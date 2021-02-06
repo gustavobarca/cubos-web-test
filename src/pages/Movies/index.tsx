@@ -9,7 +9,9 @@ import { Movie, PagedResponse } from 'types';
 import Pagination from 'components/Pagination';
 import useDebounce from 'hooks/useDebouce';
 import usePagination from 'hooks/usePagination';
-import { Main, SubContainer, ErrorText } from './styles';
+import { useHistory } from 'react-router-dom';
+import { Message, SubContainer } from 'components/PageDefaults';
+import Main from './styles';
 
 export default function Movies() {
   const [loading, setLoading] = useState(true);
@@ -18,6 +20,7 @@ export default function Movies() {
   const [searchTerm, setSearchTerm] = useState('');
   const { colors } = useTheme();
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const history = useHistory();
 
   async function onRequestUpdate(pageNumber = 1) {
     try {
@@ -46,10 +49,6 @@ export default function Movies() {
 
   const pagination = usePagination<Movie>(onRequestUpdate);
 
-  function handlePageChange(selectedPage: number) {
-    pagination.onSelectPage(selectedPage);
-  }
-
   function handleSearchChange(event: ChangeEvent<HTMLInputElement>) {
     setSearchTerm(event.target.value);
   }
@@ -60,7 +59,7 @@ export default function Movies() {
     if (error) {
       return (
         <SubContainer>
-          <ErrorText>{error}</ErrorText>
+          <Message>{error}</Message>
         </SubContainer>
       );
     }
@@ -80,7 +79,7 @@ export default function Movies() {
     if (!results.length) {
       return (
         <SubContainer>
-          <ErrorText>🎥 Não achamos nenhum filme!</ErrorText>
+          <Message>🎥 &nbsp;Não achamos nenhum filme!</Message>
         </SubContainer>
       );
     }
@@ -89,6 +88,7 @@ export default function Movies() {
       <>
         {results.map(movie => (
           <MovieCard
+            onClick={() => history.push(`/movies/${movie.id}`)}
             title={movie.title}
             genres={movie.genres}
             overview={movie.overview}
@@ -102,7 +102,7 @@ export default function Movies() {
         <Pagination
           actualPage={activePage}
           totalPages={total}
-          onChange={handlePageChange}
+          onChange={pagination.onSelectPage}
         />
       </>
     );
@@ -117,7 +117,10 @@ export default function Movies() {
     <Main>
       <Header title="Movies" />
       <section className="page-content">
-        <SearchBar onChange={handleSearchChange} placeholder="Busque um filme por nome ou gênero..." />
+        <SearchBar
+          onChange={handleSearchChange}
+          placeholder="Busque um filme por nome ou gênero..."
+        />
         <section id="movies-content">
           {renderContent()}
         </section>

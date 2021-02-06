@@ -3,9 +3,15 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   margin-bottom: 50px;
+  transition: opacity 0.1s;
+  cursor: pointer;
 
   @media(max-width: 800px) {
     flex-direction: column;
+  }
+
+  &:hover {
+    opacity: 0.8;
   }
 `;
 
@@ -72,7 +78,7 @@ export const RightCol = styled.div`
   #movie-content p {
     font-family: 'Lato-Regular';
     color: ${props => props.theme.colors.secondaryText};
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   @media(max-width: 800px) {

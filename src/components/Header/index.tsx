@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Container, Text } from './styles';
 
 interface Props {
@@ -6,9 +7,11 @@ interface Props {
 }
 
 export default function Header({ title }: Props) {
+  const history = useHistory();
+
   return (
     <Container>
-      <Text>{title}</Text>
+      <Text onClick={() => history.push('/')}>{title}</Text>
     </Container>
   );
 }

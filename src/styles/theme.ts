@@ -4,9 +4,10 @@ export default {
     complementary: '#00E7E3',
     secondaryText: '#555555',
     primaryText: '#0C102D',
-    inputBackground: '#F7F8FB',
+    inputBackground: '#F2F2F2',
     border: '#c7c7c7',
     background: '#FFF',
     foreground: '#EBEBEB',
+    middleLayer: '#E6E6E6',
   },
 };

@@ -9,6 +9,5 @@ export default styled.span`
   font-size: 16px;
   font-family: 'Abel-Regular';
   color: ${props => props.theme.colors.primary};
-  margin-top: 10px;
   margin-right: 10px;
 `;

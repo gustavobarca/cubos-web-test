@@ -15,6 +15,7 @@ interface Props {
   overview: string;
   genres: Genre[];
   backdropPath: string;
+  onClick: () => void;
 }
 
 export default function MovieCard({
@@ -25,12 +26,13 @@ export default function MovieCard({
   overview,
   genres,
   backdropPath,
+  onClick,
 }: Props) {
   const poster = posterPath ? `${configs.imagesURL}/w300/${posterPath}` : defaultImg;
   const backdrop = backdropPath ? `${configs.imagesURL}/w300/${backdropPath}` : defaultImg;
 
   return (
-    <Container>
+    <Container onClick={onClick}>
       <Poster
         id="poster"
         poster={poster}

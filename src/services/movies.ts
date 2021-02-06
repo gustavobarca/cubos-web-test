@@ -1,4 +1,4 @@
-import { PagedResponse, Movie } from 'types';
+import { PagedResponse, Movie, VideosResult } from 'types';
 import queryString from 'query-string';
 import api from './api';
 import genresService from './genres';
@@ -19,9 +19,23 @@ async function addGenresToMovies(movies: Movie[]) {
 }
 
 async function getPopular(page = 1) {
-  const { data } = await api.get<PagedResponse<Movie>>(`/movie/popular?page=${page}`);
+  const { data } = await api.get<PagedResponse<Movie>>(`/discover/movie?page=${page}`);
 
   data.results = await addGenresToMovies(data.results);
+  return data;
+}
+
+async function getVideos(id: number) {
+  const { data } = await api.get<VideosResult>(`/movie/${id}/videos`);
+  return data.results;
+}
+
+async function get(id: number) {
+  const { data } = await api.get<Movie>(`/movie/${id}`);
+
+  const [trailer] = await getVideos(id);
+  data.videoObject = trailer;
+
   return data;
 }
 
@@ -34,4 +48,4 @@ async function search(page = 1, query: string) {
   return data;
 }
 
-export default { getPopular, search };
+export default { getPopular, search, get };

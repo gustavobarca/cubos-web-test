@@ -10,6 +10,7 @@ export const Container = styled.header`
 `;
 
 export const Text = styled.h1`
+  cursor: pointer;
   font-family: 'Abel-Regular';
   color: ${props => props.theme.colors.complementary};
   font-weight: 100;

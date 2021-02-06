@@ -5,22 +5,29 @@ import moviesService from 'services/movies';
 import { PulseLoader } from 'react-spinners';
 import { useTheme } from 'styled-components';
 import MovieCard from 'components/MovieCard';
-import { Movie, PagedResponse } from 'types';
+import { Genre, Movie, PagedResponse } from 'types';
 import Pagination from 'components/Pagination';
 import useDebounce from 'hooks/useDebouce';
 import usePagination from 'hooks/usePagination';
 import { useHistory } from 'react-router-dom';
 import { Message, SubContainer } from 'components/PageDefaults';
+import genresService from 'services/genres';
+import GenreFilter from 'components/GenreFilter';
 import Main from './styles';
 
+const all = { id: 0, name: 'Todos' };
+
 export default function Movies() {
+  const [genres, setGenres] = useState<Genre[]>([]);
+  const [genresLoading, setGenresLoading] = useState(true);
+  const [selectedGenre, setSelectedGenre] = useState<Genre>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [total, setTotal] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const { colors } = useTheme();
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const history = useHistory();
+  const debounce = useDebounce(searchTerm, 500);
 
   async function onRequestUpdate(pageNumber = 1) {
     try {
@@ -31,8 +38,10 @@ export default function Movies() {
         total_results: 0,
       };
 
-      if (debouncedSearchTerm) {
-        result = await moviesService.search(pageNumber, debouncedSearchTerm);
+      if (debounce.value && searchTerm) {
+        result = await moviesService.search(pageNumber, debounce.value);
+      } else if (selectedGenre && selectedGenre.id) {
+        result = await moviesService.getByGenre(pageNumber, selectedGenre.id);
       } else {
         result = await moviesService.getPopular(pageNumber);
       }
@@ -42,15 +51,37 @@ export default function Movies() {
 
       return result.results;
     } catch (err) {
-      setError('😕 Oops! Ocorreu um erro');
+      setError('😕 Oops! Ocorreu um erro.');
       return [];
     }
   }
 
   const pagination = usePagination<Movie>(onRequestUpdate);
 
+  async function fetchGenres() {
+    try {
+      const allGenres = await genresService.getFromMovies();
+      setGenres([all, ...allGenres]);
+      setSelectedGenre(all);
+      setGenresLoading(false);
+    } catch (err) {
+      setError('😕 Oops! Ocorreu um erro.');
+    }
+  }
+
   function handleSearchChange(event: ChangeEvent<HTMLInputElement>) {
     setSearchTerm(event.target.value);
+  }
+
+  function clearSearch() {
+    const input = document.getElementById('search') as HTMLInputElement;
+    input.value = '';
+    debounce.reset();
+  }
+
+  function handleSelectGenre(genre: Genre) {
+    clearSearch();
+    setSelectedGenre(genre);
   }
 
   function renderContent() {
@@ -108,18 +139,46 @@ export default function Movies() {
     );
   }
 
-  useEffect(() => {
+  function fetchResults() {
+    if (!loading) setLoading(true);
     pagination.reset();
     pagination.fetch();
-  }, [debouncedSearchTerm]);
+  }
+
+  useEffect(() => {
+    if (selectedGenre && selectedGenre.name === 'Todos') {
+      fetchResults();
+      return;
+    }
+
+    if (selectedGenre) fetchResults();
+  }, [selectedGenre]);
+
+  useEffect(() => {
+    fetchGenres();
+  }, []);
+
+  useEffect(() => {
+    if (debounce.value !== undefined) {
+      setSelectedGenre(undefined);
+      fetchResults();
+    }
+  }, [debounce.value]);
 
   return (
     <Main>
       <Header title="Movies" />
       <section className="page-content">
         <SearchBar
+          disabled={loading}
           onChange={handleSearchChange}
           placeholder="Busque um filme por nome ou gênero..."
+        />
+        <GenreFilter
+          genres={genres}
+          onChange={handleSelectGenre}
+          loading={genresLoading}
+          selectedGenre={selectedGenre}
         />
         <section id="movies-content">
           {renderContent()}

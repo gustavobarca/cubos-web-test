@@ -47,7 +47,11 @@
         "import/no-unresolved": "off",
         "react/jsx-props-no-spreading": "off",
         "no-shadow": "off",
+        "camelcase": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
+        "no-param-reassign": "off",
+        "no-plusplus": "off",
+        "no-undef": "off",
         "react/jsx-filename-extension": [
             1,
             {

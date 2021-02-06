@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
  */
 
 import Movies from 'pages/Movies';
+import MovieDetail from 'pages/MovieDetail';
 
 export enum Paths {
   Movies = '/',
@@ -17,6 +18,9 @@ export default function Routes() {
       <Switch>
         <Route exact path="/">
           <Movies />
+        </Route>
+        <Route exact path="/movies/:id">
+          <MovieDetail />
         </Route>
       </Switch>
     </Router>

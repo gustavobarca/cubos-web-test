@@ -1,11 +1,15 @@
 # 🎥 Cubos Movies
 
-###  🚀 Getting started
+Projeto para o desafio técnico de web da Cubos Academy.
 
-Install dependencies:
+###  🚀 Iniciando
+
+Instale as dependências:
 
     yarn
 
-Start the project
+Inicie o projeto
 
     yarn start
+    
+    

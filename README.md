@@ -14,6 +14,7 @@ Projeto para o desafio técnico de web da Cubos Academy.
 - ⚛️ React JS
 - 💅 Styled Components
 - 🎣 React Hooks
+- ⚙️ Axios
 
 ###  🚀 Iniciando
 

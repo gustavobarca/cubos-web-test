@@ -8,10 +8,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Movies from 'pages/Movies';
 import MovieDetail from 'pages/MovieDetail';
 
-export enum Paths {
-  Movies = '/',
-}
-
 export default function Routes() {
   return (
     <Router>

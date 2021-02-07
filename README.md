@@ -1,6 +1,5 @@
 <h1 align="center">
-    <img alt="Cubos logo" width="200" src="src/assets/images/cubos_logo.png" />
-    </br>
+    <img alt="Cubos logo" width="170" src="src/assets/images/cubos_logo.png" />
     </br>
     Desafio técnico web Cubos Academy
     </br>
@@ -16,6 +15,14 @@ Projeto para o desafio técnico de web da Cubos Academy.
 - 🎣 React Hooks
 
 ###  🚀 Iniciando
+
+Clone o projeto:
+
+    git clone https://github.com/gustavobarca/cubos-web-test
+    
+Acesse a pasta do projeto:
+
+    cd cubos-web-test
 
 Instale as dependências:
 

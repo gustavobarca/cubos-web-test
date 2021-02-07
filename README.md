@@ -1,6 +1,7 @@
 <h1 align="center">
     <img alt="Cubos logo" width="170" src="src/assets/images/cubos_logo.png" />
     </br>
+    </br>
     Desafio técnico web Cubos Academy
     </br>
     </br>

@@ -9,12 +9,13 @@
 
 Projeto para o desafio técnico de web da Cubos Academy.
 
-### 🧩 Tecnologias usadas
+### 🧩 Tecnologias e ferramentas usadas
 
 - ⚛️ React JS
 - 💅 Styled Components
 - 🎣 React Hooks
 - ⚙️ Axios
+- 📅 XDate
 
 ###  🚀 Iniciando
 

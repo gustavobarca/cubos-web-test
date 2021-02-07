@@ -11,14 +11,6 @@ export default function Pagination({ actualPage, totalPages, onChange }: Props) 
   const [pageNumbers, setPageNumbers] = useState([actualPage]);
   const [all, setAll] = useState<number[]>([]);
 
-  function parseToArray(total?: number) {
-    if (!total) return [actualPage];
-
-    const elements: number[] = [];
-    for (let i = 1; i <= total; i++) elements.push(i);
-    return elements;
-  }
-
   function crop(array: number[], page: number, total: number) {
     const padding = (total - 1) / 2;
     if (array.length <= total) return array;
@@ -42,12 +34,19 @@ export default function Pagination({ actualPage, totalPages, onChange }: Props) 
   }
 
   useEffect(() => {
+    function parseToArray(total?: number) {
+      if (!total) return [actualPage];
+      const elements: number[] = [];
+      for (let i = 1; i <= total; i++) elements.push(i);
+      return elements;
+    }
+
     setAll(parseToArray(totalPages));
-  }, []);
+  }, [actualPage, totalPages]);
 
   useEffect(() => {
     setPageNumbers(crop(all, actualPage, 5));
-  }, [all]);
+  }, [all, actualPage]);
 
   function handleClick(item: number) {
     if (item === actualPage) return;

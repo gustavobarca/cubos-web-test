@@ -2,7 +2,7 @@ import Header from 'components/Header';
 import MovieDetailSection from 'components/MovieDetailSection';
 import { Message, SubContainer } from 'components/PageDefaults';
 import Video from 'components/Video';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { PulseLoader } from 'react-spinners';
 import moviesService from 'services/movies';
@@ -17,15 +17,15 @@ export default function MovieDetails() {
   const { id }: { id?: string | number } = useParams();
   const { colors } = useTheme();
 
-  async function fetch() {
+  const fetch = useCallback(async () => {
     try {
       const data = await moviesService.get(parseInt(String(id), 10));
       setMovie(data);
       setLoading(false);
     } catch (error) {
-      setError('😕 Oops! Ocorreu um erro.');
+      setError('Oops! Ocorreu um erro.');
     }
-  }
+  }, [id]);
 
   useEffect(() => {
     fetch();
@@ -35,7 +35,11 @@ export default function MovieDetails() {
     if (error) {
       return (
         <SubContainer>
-          <Message>{error}</Message>
+          <Message>
+            <span role="img" aria-label="Sad Face">😕</span>
+            {' '}
+            {error}
+          </Message>
         </SubContainer>
       );
     }
@@ -55,7 +59,11 @@ export default function MovieDetails() {
     if (!movie) {
       return (
         <SubContainer>
-          <Message>😮 &nbsp;Oops! Este filme não foi encontrado.</Message>
+          <Message>
+            <span role="img" aria-label="Surprised Face">😮</span>
+            {' '}
+            &nbsp;Oops! Este filme não foi encontrado.
+          </Message>
         </SubContainer>
       );
     }

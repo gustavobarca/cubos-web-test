@@ -22,7 +22,7 @@ export default function GenreFilter({
 
   if (loading) {
     return (
-      <Container loading>
+      <Container loading={1}>
         <PulseLoader
           color={colors.primary}
           loading
@@ -33,7 +33,7 @@ export default function GenreFilter({
   }
 
   return (
-    <Container loading={false}>
+    <Container loading={0}>
       {genres.map(genre => (
         <GenreTag
           key={genre.id}

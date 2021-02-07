@@ -65,7 +65,7 @@ export default function Movies() {
       setSelectedGenre(all);
       setGenresLoading(false);
     } catch (err) {
-      setError('😕 Oops! Ocorreu um erro.');
+      setError('Oops! Ocorreu um erro.');
     }
   }
 
@@ -90,7 +90,11 @@ export default function Movies() {
     if (error) {
       return (
         <SubContainer>
-          <Message>{error}</Message>
+          <Message>
+            <span role="img" aria-label="Sad Face">😕</span>
+            {' '}
+            {error}
+          </Message>
         </SubContainer>
       );
     }
@@ -110,7 +114,11 @@ export default function Movies() {
     if (!results.length) {
       return (
         <SubContainer>
-          <Message>🎥 &nbsp;Não achamos nenhum filme!</Message>
+          <Message>
+            <span role="img" aria-label="cine Camera">🎥</span>
+            {' '}
+            &nbsp;Não achamos nenhum filme!
+          </Message>
         </SubContainer>
       );
     }
@@ -172,7 +180,7 @@ export default function Movies() {
         <SearchBar
           disabled={loading}
           onChange={handleSearchChange}
-          placeholder="Busque um filme por nome ou gênero..."
+          placeholder="Busque um filme pelo nome..."
         />
         <GenreFilter
           genres={genres}

@@ -16,6 +16,7 @@ Projeto para o desafio técnico de web da Cubos Academy.
 - 🎣 React Hooks
 - ⚙️ Axios
 - 📅 XDate
+- 🔵 Typescript
 
 ###  🚀 Iniciando
 

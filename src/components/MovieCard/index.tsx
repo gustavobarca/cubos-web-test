@@ -29,7 +29,7 @@ export default function MovieCard({
   onClick,
 }: Props) {
   const poster = posterPath ? `${configs.imagesURL}/w300/${posterPath}` : defaultImg;
-  const backdrop = backdropPath ? `${configs.imagesURL}/w300/${backdropPath}` : defaultImg;
+  const backdrop = backdropPath ? `${configs.imagesURL}/w500/${backdropPath}` : defaultImg;
 
   return (
     <Container onClick={onClick}>

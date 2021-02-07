@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 
-export default styled.div<{ loading: boolean }>`
-  margin-bottom: 10px;
+export default styled.div<{ loading: number }>`
   margin-top: 30px;
   
   ${props => props.loading && css`

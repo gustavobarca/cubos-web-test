@@ -12,6 +12,7 @@ export default styled.button<{ isClickable: boolean; active: boolean }>`
   margin-right: 10px;
   outline: none;
   transition: opacity 0.1s;
+  margin-bottom: 10px;
 
   ${props => props.isClickable && css`
     &:hover {
